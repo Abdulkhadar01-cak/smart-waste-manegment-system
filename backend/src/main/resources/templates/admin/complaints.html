@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Complaints - Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Manage Complaints</h2>
+            <p class="text-muted">View complaints and assign them to workers.</p>
+        </div>
+
+        <a th:href="@{/admin/dashboard}" class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Success message -->
+    <div th:if="${success}" class="alert alert-success"
+         th:text="${success}"></div>
+
+    <!-- Error message -->
+    <div th:if="${error}" class="alert alert-danger"
+         th:text="${error}"></div>
+
+    <!-- No complaints -->
+    <div th:if="${#lists.isEmpty(complaints)}"
+         class="alert alert-info">
+        No complaints have been submitted yet.
+    </div>
+
+    <!-- Complaint cards -->
+    <div th:each="complaint : ${complaints}"
+         class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between">
+                <h5 th:text="${complaint.complaintType}">
+                    Complaint Type
+                </h5>
+
+                <span class="badge bg-primary"
+                      th:text="${complaint.status}">
+                    Status
+                </span>
+            </div>
+
+            <hr>
+
+            <p>
+                <strong>Description:</strong>
+                <span th:text="${complaint.description}"></span>
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                <span th:text="${complaint.address}"></span>
+            </p>
+
+            <p>
+                <strong>Reported by:</strong>
+                <span th:text="${complaint.createdBy.fullName}"></span>
+            </p>
+
+            <div th:if="${complaint.imageUrl != null}">
+                <strong>Complaint Image:</strong>
+                <br>
+                <img th:src="${complaint.imageUrl}"
+                     alt="Complaint Image"
+                     class="img-fluid rounded mt-2"
+                     style="max-width: 250px;">
+            </div>
+
+            <hr>
+
+            <form th:action="@{/admin/complaints/assign}"
+                  method="post"
+                  class="row g-3 align-items-end">
+
+                <input type="hidden"
+                       name="complaintId"
+                       th:value="${complaint.id}">
+
+                <div class="col-md-8">
+
+                    <label class="form-label">
+                        Select Worker
+                    </label>
+
+                    <select name="workerId"
+                            class="form-select"
+                            required
+                            th:disabled="${#lists.isEmpty(workers)}">
+
+                        <option value="">Choose a worker</option>
+
+                        <option th:each="worker : ${workers}"
+                                th:value="${worker.id}"
+                                th:text="${worker.fullName + ' (' + worker.email + ')'}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <button type="submit"
+                            class="btn btn-success w-100"
+                            th:disabled="${#lists.isEmpty(workers)}">
+                        Assign Complaint
+                    </button>
+
+                </div>
+
+            </form>
+
+            <div th:if="${#lists.isEmpty(workers)}"
+                 class="text-danger mt-2">
+                No active workers available. Create a worker account first.
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

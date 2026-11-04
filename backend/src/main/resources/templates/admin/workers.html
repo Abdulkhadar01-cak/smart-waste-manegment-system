@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Workers | Smart Waste Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #263238;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #1b4332;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 11px 17px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            background: #455a64;
+        }
+
+        .create-btn {
+            background: #198754;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #e8f5e9;
+            color: #1b4332;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .inactive {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>Manage Workers</h1>
+
+        <div class="buttons">
+
+            <a th:href="@{/admin/dashboard}" class="btn back-btn">
+                Back to Dashboard
+            </a>
+
+            <a th:href="@{/admin/workers/new}" class="btn create-btn">
+                + Create Worker
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Registered Workers</h2>
+
+        <table th:if="${not #lists.isEmpty(workers)}">
+
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Account Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr th:each="worker, iter : ${workers}">
+
+                    <td th:text="${iter.count}">1</td>
+
+                    <td th:text="${worker.fullName}">
+                        Worker Name
+                    </td>
+
+                    <td th:text="${worker.email}">
+                        worker@email.com
+                    </td>
+
+                    <td th:text="${worker.phoneNumber}">
+                        9876543210
+                    </td>
+
+                    <td>
+                        <span th:if="${worker.active}"
+                              class="status active">
+                            Active
+                        </span>
+
+                        <span th:unless="${worker.active}"
+                              class="status inactive">
+                            Inactive
+                        </span>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <div class="empty"
+             th:if="${#lists.isEmpty(workers)}">
+
+            <h3>No workers registered yet.</h3>
+
+            <p>Create a worker account to get started.</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

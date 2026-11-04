@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Create Worker - Smart Waste Management</title>
+
+<link rel="stylesheet"
+      th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+```
+
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+
+```
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <h2 class="mb-2">Create Worker Account</h2>
+
+                <p class="text-muted">
+                    Enter the details to register a new waste management worker.
+                </p>
+
+                <!-- Success Message -->
+                <div th:if="${success}"
+                     class="alert alert-success"
+                     th:text="${success}">
+                </div>
+
+                <!-- Error Message -->
+                <div th:if="${error}"
+                     class="alert alert-danger"
+                     th:text="${error}">
+                </div>
+
+                <!-- Worker Registration Form -->
+                <form th:action="@{/admin/workers/create}" method="post">
+
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">
+                            Full Name
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="fullName"
+                               name="fullName"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            Email Address
+                        </label>
+
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">
+                            Phone Number
+                        </label>
+
+                        <input type="tel"
+                               class="form-control"
+                               id="phoneNumber"
+                               name="phoneNumber"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            Temporary Password
+                        </label>
+
+                        <input type="password"
+                               class="form-control"
+                               id="password"
+                               name="password"
+                               minlength="8"
+                               required>
+
+                        <small class="text-muted">
+                            Give this temporary password to the worker securely.
+                        </small>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary w-100">
+                        Create Worker Account
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-3">
+                    <a th:href="@{/admin/dashboard}">
+                        Back to Admin Dashboard
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+```
+
+</div>
+
+</body>
+</html>

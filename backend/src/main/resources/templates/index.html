@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${appName}">Smart Waste Management System</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="landing-page">
+
+<header class="landing-header">
+    <nav class="landing-nav container">
+
+        <a th:href="@{/}" class="landing-brand">
+            <img th:src="@{/images/smart-waste-logo.svg}"
+                 alt="Smart Waste Logo" class="landing-logo">
+
+            <span class="landing-brand-copy">
+                <strong th:text="${appName}">Smart Waste</strong>
+                <small>Cleaner spaces. Smarter communities.</small>
+            </span>
+        </a>
+
+        <div class="landing-nav-links">
+            <a href="#services">Our Services</a>
+            <a href="#how-it-works">How It Works</a>
+            <a th:href="@{/login}" class="landing-login">Log in</a>
+            <a th:href="@{/citizen/register}" class="landing-nav-cta">
+                Get Started →
+            </a>
+        </div>
+
+    </nav>
+</header>
+
+
+<main>
+
+    <!-- HERO SECTION -->
+    <section class="landing-hero">
+
+        <div class="container landing-hero-grid">
+
+            <div class="landing-hero-copy">
+
+                <div class="landing-eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    A smarter way to keep our neighbourhood clean
+                </div>
+
+                <h1>
+                    Cleaner streets start with
+                    <span>one small action.</span>
+                </h1>
+
+                <p class="landing-hero-description">
+                    Report waste, request a pickup and follow every update.
+                    Together, we can make waste management simpler,
+                    faster and more transparent.
+                </p>
+
+                <div class="landing-hero-actions">
+
+                    <a th:href="@{/citizen/register}"
+                       class="landing-button landing-button-primary">
+                        Request a Service →
+                    </a>
+
+                    <a th:href="@{/login}"
+                       class="landing-button landing-button-secondary">
+                        Sign in to your account
+                    </a>
+
+                </div>
+
+                <div class="landing-trust-note">
+                    <span class="trust-check">✓</span>
+                    Easy reporting
+                    <span class="trust-separator">•</span>
+                    Trackable requests
+                    <span class="trust-separator">•</span>
+                    Cleaner communities
+                </div>
+
+            </div>
+
+
+            <!-- HERO ILLUSTRATION -->
+            <div class="landing-hero-art">
+
+                <div class="art-orbit orbit-one"></div>
+                <div class="art-orbit orbit-two"></div>
+                <div class="art-sun"></div>
+
+                <div class="art-leaf leaf-one">✦</div>
+                <div class="art-leaf leaf-two">✦</div>
+
+                <div class="art-city">
+
+                    <div class="city-building building-one">
+                        <i></i><i></i><i></i>
+                    </div>
+
+                    <div class="city-building building-two">
+                        <i></i><i></i><i></i>
+                    </div>
+
+                    <div class="city-building building-three">
+                        <i></i><i></i><i></i>
+                    </div>
+
+                    <div class="city-tree tree-one">
+                        <b></b><span></span>
+                    </div>
+
+                    <div class="city-tree tree-two">
+                        <b></b><span></span>
+                    </div>
+
+                    <div class="city-ground"></div>
+
+                    <div class="art-bin">
+                        <span></span><b></b>
+                    </div>
+
+                    <div class="art-person">
+                        <b></b><i></i><span></span>
+                    </div>
+
+                </div>
+
+
+                <div class="floating-status status-top">
+                    <span class="status-icon">✓</span>
+                    <span>
+                        <strong>Request submitted</strong>
+                        <small>Your report is in safe hands</small>
+                    </span>
+                </div>
+
+                <div class="floating-status status-bottom">
+                    <span class="status-pulse"></span>
+                    <span>
+                        <strong>Cleaner neighbourhood</strong>
+                        <small>Small actions make a big impact</small>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="hero-bottom-curve"></div>
+
+    </section>
+
+
+    <!-- SERVICES SECTION -->
+    <section class="landing-section services-section" id="services">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <span class="section-kicker">WHAT YOU CAN DO</span>
+
+                <h2>
+                    Waste services, made
+                    <span>simple.</span>
+                </h2>
+
+                <p>
+                    Choose the service you need. Submit a request in a few
+                    steps and keep track of its progress.
+                </p>
+
+            </div>
+
+
+            <div class="service-grid">
+
+                <article class="service-tile">
+
+                    <div class="service-icon service-icon-green">⌂</div>
+
+                    <span class="service-number">01</span>
+
+                    <h3>Home Garbage Pickup</h3>
+
+                    <p>
+                        Request a doorstep garbage collection
+                        whenever you need it.
+                    </p>
+
+                    <a th:href="@{/citizen/register}" class="service-link">
+                        Request pickup →
+                    </a>
+
+                </article>
+
+
+                <article class="service-tile service-tile-featured">
+
+                    <div class="service-icon service-icon-orange">♻</div>
+
+                    <span class="service-number">02</span>
+
+                    <h3>Public Dustbin Pickup</h3>
+
+                    <p>
+                        Report an overflowing or unattended
+                        public dustbin in your area.
+                    </p>
+
+                    <a th:href="@{/citizen/register}" class="service-link">
+                        Report a dustbin →
+                    </a>
+
+                </article>
+
+
+                <article class="service-tile">
+
+                    <div class="service-icon service-icon-blue">⌖</div>
+
+                    <span class="service-number">03</span>
+
+                    <h3>Public Area Cleaning</h3>
+
+                    <p>
+                        Report waste that needs attention
+                        on public streets and areas.
+                    </p>
+
+                    <a th:href="@{/citizen/register}" class="service-link">
+                        Report an area →
+                    </a>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+    <section class="landing-section how-section" id="how-it-works">
+
+        <div class="container how-grid">
+
+            <div class="how-intro">
+
+                <span class="section-kicker">HOW IT WORKS</span>
+
+                <h2>
+                    From report to resolution,
+                    <span>keep it moving.</span>
+                </h2>
+
+                <p>
+                    Our simple process helps citizens raise concerns
+                    and follow what happens next.
+                </p>
+
+                <a th:href="@{/citizen/register}"
+                   class="landing-button landing-button-primary">
+                    Get Started Today →
+                </a>
+
+            </div>
+
+
+            <div class="steps-list">
+
+                <div class="step-item">
+
+                    <div class="step-number">1</div>
+
+                    <div>
+                        <h3>Submit a Request</h3>
+                        <p>
+                            Choose a service, describe the issue
+                            and share the location.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="step-connector"></div>
+
+                <div class="step-item">
+
+                    <div class="step-number">2</div>
+
+                    <div>
+                        <h3>Team Gets Assigned</h3>
+                        <p>
+                            Your request can be reviewed
+                            and assigned to a worker.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="step-connector"></div>
+
+                <div class="step-item">
+
+                    <div class="step-number">3</div>
+
+                    <div>
+                        <h3>Follow the Progress</h3>
+                        <p>
+                            Sign in to check the latest status
+                            of your complaint.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CALL TO ACTION -->
+    <section class="landing-cta-section">
+
+        <div class="container">
+
+            <div class="landing-cta-panel">
+
+                <div>
+
+                    <span class="cta-kicker">BE PART OF THE CHANGE</span>
+
+                    <h2>
+                        A cleaner community begins with you.
+                    </h2>
+
+                    <p>
+                        Raise a request today and take one step
+                        towards a cleaner neighbourhood.
+                    </p>
+
+                </div>
+
+                <a th:href="@{/citizen/register}"
+                   class="landing-button landing-button-light">
+                    Create Your Account →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- JAVASCRIPT STATUS -->
+    <div class="container landing-runtime-wrap">
+
+        <div class="landing-runtime">
+
+            <span id="js-runtime-status">
+                Preparing your experience...
+            </span>
+
+            <span id="client-timestamp"
+                  th:text="'Updated: ' + ${checkTimestamp}">
+            </span>
+
+        </div>
+
+        <span class="visually-hidden"
+              th:text="${projectStatus}">
+            System status
+        </span>
+
+    </div>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="landing-footer">
+
+    <div class="container landing-footer-inner">
+
+        <a th:href="@{/}" class="landing-footer-brand">
+
+            <img th:src="@{/images/smart-waste-logo.svg}"
+                 alt="" class="footer-logo">
+
+            <strong th:text="${appName}">
+                Smart Waste Management System
+            </strong>
+
+        </a>
+
+        <p>
+            Building cleaner communities, one action at a time.
+        </p>
+
+        <span>
+            © 2026 Smart Waste Management System
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

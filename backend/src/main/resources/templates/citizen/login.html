@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Citizen Login | Smart Waste Management</title>
+
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f5f6f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(37, 40, 61, 0.10);
+        }
+
+        /* LEFT SIDE */
+
+        .login-brand-panel {
+            background: #25283d;
+            color: white;
+            padding: 55px 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-logo img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .brand-logo h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .brand-logo small {
+            display: block;
+            color: #b9c1ce;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+            margin-top: 55px;
+        }
+
+        .brand-tag {
+            display: inline-block;
+            background: rgba(25, 135, 84, 0.2);
+            color: #80d9a6;
+            padding: 9px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 22px;
+        }
+
+        .brand-content h1 {
+            font-size: 39px;
+            line-height: 1.2;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .brand-content h1 span {
+            color: #53c982;
+        }
+
+        .brand-content p {
+            color: #c1c7d2;
+            font-size: 15px;
+            line-height: 1.9;
+            max-width: 380px;
+        }
+
+        .brand-features {
+            margin-top: 35px;
+        }
+
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            color: #e2e6ed;
+            font-size: 13px;
+        }
+
+        .feature-check {
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            background: rgba(25, 135, 84, 0.25);
+            color: #80d9a6;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .brand-footer {
+            color: #aab2c0;
+            font-size: 11px;
+            margin-top: 45px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .decoration-circle {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+            right: -110px;
+            bottom: -100px;
+        }
+
+        .decoration-circle::after {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+            top: 45px;
+            left: 45px;
+        }
+
+        /* RIGHT SIDE */
+
+        .login-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 55px 55px;
+        }
+
+        .login-form-content {
+            width: 100%;
+            max-width: 390px;
+        }
+
+        .login-heading {
+            margin-bottom: 35px;
+        }
+
+        .login-heading small {
+            color: #198754;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .login-heading h2 {
+            color: #25283d;
+            font-size: 31px;
+            font-weight: 800;
+            margin: 12px 0 9px;
+        }
+
+        .login-heading p {
+            color: #858b98;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .login-form .form-label {
+            color: #34394b;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .login-form .form-control {
+            height: 51px;
+            border: 1px solid #e1e5eb;
+            border-radius: 9px;
+            padding: 12px 15px;
+            font-size: 14px;
+            background: #fafbfc;
+            box-shadow: none;
+        }
+
+        .login-form .form-control:focus {
+            border-color: #198754;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.10);
+        }
+
+        .login-field {
+            margin-bottom: 22px;
+        }
+
+        .login-submit {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 9px;
+            background: #198754;
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            margin-top: 8px;
+            transition: 0.2s ease;
+        }
+
+        .login-submit:hover {
+            background: #146c43;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(25, 135, 84, 0.2);
+        }
+
+        .register-text {
+            text-align: center;
+            color: #858b98;
+            font-size: 13px;
+            margin-top: 25px;
+        }
+
+        .register-text a {
+            color: #198754;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        .other-logins {
+            border-top: 1px solid #edf0f3;
+            margin-top: 28px;
+            padding-top: 22px;
+            text-align: center;
+        }
+
+        .other-logins p {
+            color: #858b98;
+            font-size: 12px;
+            margin-bottom: 14px;
+        }
+
+        .role-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .role-links a {
+            color: #25283d;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 9px 13px;
+            background: #f5f6f8;
+            border-radius: 7px;
+            transition: 0.2s;
+        }
+
+        .role-links a:hover {
+            background: #e5f3e9;
+            color: #198754;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #9298a4;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .back-home:hover {
+            color: #198754;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 768px) {
+
+            .login-wrapper {
+                padding: 15px;
+            }
+
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+            }
+
+            .login-brand-panel {
+                padding: 30px;
+                min-height: 330px;
+            }
+
+            .brand-content {
+                margin-top: 35px;
+            }
+
+            .brand-content h1 {
+                font-size: 29px;
+            }
+
+            .brand-content p {
+                font-size: 13px;
+            }
+
+            .brand-features {
+                display: none;
+            }
+
+            .brand-footer {
+                margin-top: 30px;
+            }
+
+            .login-form-panel {
+                padding: 40px 28px;
+            }
+
+            .login-heading h2 {
+                font-size: 27px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+    <div class="login-container">
+
+        <!-- LEFT BRANDING PANEL -->
+
+        <div class="login-brand-panel">
+
+            <div class="brand-logo">
+                <img th:src="@{/images/smart-waste-logo.svg}"
+                     alt="Smart Waste Logo">
+
+                <div>
+                    <h3>Smart Waste</h3>
+                    <small>Management System</small>
+                </div>
+            </div>
+
+            <div class="brand-content">
+
+                <div class="brand-tag">
+                    A CLEANER TOMORROW
+                </div>
+
+                <h1>
+                    Together, Let's Build a
+                    <span>Cleaner City.</span>
+                </h1>
+
+                <p>
+                    Report garbage issues, request waste collection
+                    and help make your neighbourhood cleaner and healthier.
+                </p>
+
+                <div class="brand-features">
+
+                    <div class="brand-feature">
+                        <span class="feature-check">✓</span>
+                        Easy garbage collection requests
+                    </div>
+
+                    <div class="brand-feature">
+                        <span class="feature-check">✓</span>
+                        Report public waste problems
+                    </div>
+
+                    <div class="brand-feature">
+                        <span class="feature-check">✓</span>
+                        Track your complaint status
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="brand-footer">
+                © 2026 Smart Waste Management System
+            </div>
+
+            <div class="decoration-circle"></div>
+
+        </div>
+
+
+        <!-- RIGHT LOGIN PANEL -->
+
+        <div class="login-form-panel">
+
+            <div class="login-form-content">
+
+                <div class="login-heading">
+
+                    <small>CITIZEN PORTAL</small>
+
+                    <h2>Welcome Back!</h2>
+
+                    <p>Sign in to access your account.</p>
+
+                </div>
+
+
+                <!-- ERROR MESSAGES -->
+
+                <div th:if="${param.error}"
+                     class="alert alert-danger"
+                     role="alert">
+
+                    <span th:if="${param.error[0] == 'invalid'}">
+                        Invalid email or password.
+                    </span>
+
+                    <span th:if="${param.error[0] == 'disabled'}">
+                        Your account is inactive. Please contact the administrator.
+                    </span>
+
+                    <span th:if="${param.error[0] == 'role'}">
+                        You do not have permission to use this login.
+                    </span>
+
+                    <span th:if="${param.error[0] == 'locked'}">
+                        Your account is locked.
+                    </span>
+
+                    <span th:if="${param.error[0] == 'expired'}">
+                        Your account has expired.
+                    </span>
+
+                    <span th:if="${param.error[0] == 'credentials'}">
+                        Your credentials have expired.
+                    </span>
+
+                </div>
+
+
+                <div th:if="${param.logout}"
+                     class="alert alert-success"
+                     role="alert">
+
+                    You have been logged out successfully.
+
+                </div>
+
+
+                <!-- LOGIN FORM -->
+
+                <form th:action="@{/login}"
+                      method="post"
+                      class="login-form">
+
+                    <input type="hidden" name="role" value="citizen"/>
+
+                    <div class="login-field">
+
+                        <label for="email" class="form-label">
+                            Email Address
+                        </label>
+
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               placeholder="Enter your email"
+                               autocomplete="username"
+                               required
+                               autofocus>
+
+                    </div>
+
+
+                    <div class="login-field">
+
+                        <label for="password" class="form-label">
+                            Password
+                        </label>
+
+                        <input type="password"
+                               class="form-control"
+                               id="password"
+                               name="password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required>
+
+                    </div>
+
+
+                    <button type="submit" class="login-submit">
+                        Sign In →
+                    </button>
+
+                </form>
+
+
+                <div class="register-text">
+                    Don't have an account?
+                    <a th:href="@{/citizen/register}">Create Account</a>
+                </div>
+
+
+                <div class="other-logins">
+
+                    <p>Looking for another portal?</p>
+
+                    <div class="role-links">
+
+                        <a th:href="@{/worker/login}">
+                            Worker Login
+                        </a>
+
+                        <a th:href="@{/admin/login}">
+                            Admin Login
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <a th:href="@{/}" class="back-home">
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,882 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - Smart Waste Management</title>
+
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+
+        :root {
+            --green: #198754;
+            --dark-green: #126b42;
+            --light-green: #eaf5ee;
+            --navy: #25283d;
+            --orange: #fc8019;
+            --muted: #737989;
+            --background: #f7f9f8;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--navy);
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header */
+
+        .admin-header {
+            background: white;
+            padding: 20px 0;
+            border-bottom: 1px solid #e8ebef;
+            box-shadow: 0 3px 15px rgba(37,40,61,0.04);
+        }
+
+        .admin-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .admin-subtitle {
+            color: var(--muted);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .admin-label {
+            display: inline-block;
+            background: var(--light-green);
+            color: var(--green);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        /* Buttons */
+
+        .btn-admin {
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-admin:hover {
+            background: var(--dark-green);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-create {
+            background: var(--orange);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-create:hover {
+            background: #e86d0b;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background: var(--navy);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-weight: 600;
+        }
+
+        .btn-logout:hover {
+            background: #3b405d;
+            color: white;
+        }
+
+        /* Section headings */
+
+        .section-heading {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 18px;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: -12px;
+            margin-bottom: 22px;
+        }
+
+        /* Statistics cards */
+
+        .stat-card {
+            background: white;
+            border: 1px solid #edf0ee;
+            border-radius: 15px;
+            padding: 22px;
+            height: 100%;
+            box-shadow: 0 5px 18px rgba(37,40,61,0.035);
+            transition: 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(37,40,61,0.08);
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            right: -25px;
+            top: -25px;
+            width: 85px;
+            height: 85px;
+            background: var(--card-soft);
+            border-radius: 50%;
+        }
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: var(--card-soft);
+            color: var(--card-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.84rem;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .stat-number {
+            color: var(--navy);
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .green-card {
+            --card-color: #198754;
+            --card-soft: #eaf5ee;
+        }
+
+        .orange-card {
+            --card-color: #fc8019;
+            --card-soft: #fff0e3;
+        }
+
+        .blue-card {
+            --card-color: #4775b8;
+            --card-soft: #e9f0fb;
+        }
+
+        .red-card {
+            --card-color: #dc3545;
+            --card-soft: #fcebed;
+        }
+
+        .purple-card {
+            --card-color: #7656b8;
+            --card-soft: #f0eafa;
+        }
+
+        /* Complaint section */
+
+        .complaint-card {
+            background: white;
+            border: 1px solid #e8ebef;
+            border-radius: 15px;
+            margin-bottom: 22px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(37,40,61,0.04);
+            transition: 0.2s ease;
+        }
+
+        .complaint-card:hover {
+            box-shadow: 0 10px 25px rgba(37,40,61,0.08);
+        }
+
+        .complaint-header {
+            padding: 20px 23px;
+            background: #fcfdfc;
+            border-bottom: 1px solid #edf0ee;
+        }
+
+        .complaint-title {
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin: 0;
+        }
+
+        .complaint-body {
+            padding: 23px;
+        }
+
+        .detail-label {
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: var(--navy);
+            font-size: 0.9rem;
+            margin-bottom: 17px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Status badges */
+
+        .status-badge {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .status-pending {
+            background: #fff0df;
+            color: #c66b0b;
+        }
+
+        .status-assigned {
+            background: #e9f0fb;
+            color: #4775b8;
+        }
+
+        .status-progress {
+            background: #eee9fc;
+            color: #7656b8;
+        }
+
+        .status-resolved {
+            background: #e4f5e9;
+            color: #198754;
+        }
+
+        .status-rejected {
+            background: #fcebed;
+            color: #dc3545;
+        }
+
+        /* Complaint image */
+
+        .complaint-image {
+            width: 100%;
+            max-width: 280px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 11px;
+            border: 1px solid #e8ebef;
+        }
+
+        /* Assignment */
+
+        .assignment-box {
+            background: #f7faf8;
+            border: 1px solid #e3eee6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 12px;
+        }
+
+        .assignment-title {
+            color: var(--navy);
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .form-select {
+            border-radius: 9px;
+            padding: 11px 13px;
+            border-color: #dfe5e1;
+        }
+
+        .form-select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(25,135,84,0.12);
+        }
+
+        .assign-button {
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 18px;
+            font-weight: 700;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .assign-button:hover {
+            background: var(--dark-green);
+        }
+
+        /* Alerts */
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 14px 18px;
+        }
+
+        /* Empty state */
+
+        .empty-state {
+            background: white;
+            border: 1px dashed #cbded0;
+            border-radius: 15px;
+            padding: 45px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Footer */
+
+        .admin-footer {
+            text-align: center;
+            padding: 25px 10px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 767px) {
+
+            .admin-title {
+                font-size: 1.5rem;
+            }
+
+            .admin-actions {
+                width: 100%;
+            }
+
+            .admin-actions a,
+            .admin-actions form,
+            .admin-actions button {
+                flex: 1;
+            }
+
+            .admin-actions button {
+                width: 100%;
+            }
+
+            .stat-number {
+                font-size: 1.7rem;
+            }
+
+            .complaint-body {
+                padding: 17px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ADMIN HEADER -->
+
+    <header class="admin-header">
+
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+                    <span class="admin-label">ADMIN CONTROL PANEL</span>
+
+                    <h1 class="admin-title">
+                        Smart Waste Management
+                    </h1>
+
+                    <p class="admin-subtitle">
+                        Monitor users, manage complaints and coordinate workers.
+                    </p>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap admin-actions">
+
+                    <a th:href="@{/admin/workers}"
+                       class="btn btn-admin">
+                        👥 Manage Workers
+                    </a>
+
+                    <a th:href="@{/admin/workers/new}"
+                       class="btn btn-create">
+                        + Create Worker
+                    </a>
+
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-logout">
+                            Logout
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container py-5">
+
+        <!-- USER OVERVIEW -->
+
+        <h4 class="section-heading">
+            👥 User Overview
+        </h4>
+
+        <p class="section-description">
+            Overview of registered citizens and waste management workers.
+        </p>
+
+        <div class="row g-3 mb-5">
+
+            <div class="col-md-4 col-sm-6">
+
+                <div class="stat-card green-card">
+
+                    <div class="stat-icon">👤</div>
+
+                    <div class="stat-label">Total Citizens</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.totalCitizens}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+
+                <div class="stat-card blue-card">
+
+                    <div class="stat-icon">👷</div>
+
+                    <div class="stat-label">Total Workers</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.totalWorkers}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+
+                <div class="stat-card orange-card">
+
+                    <div class="stat-icon">✓</div>
+
+                    <div class="stat-label">Active Workers</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.activeWorkers}">0</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLAINT OVERVIEW -->
+
+        <h4 class="section-heading">
+            📊 Complaint Overview
+        </h4>
+
+        <p class="section-description">
+            Real-time overview of reported waste management complaints.
+        </p>
+
+        <div class="row g-3 mb-5">
+
+            <div class="col-lg-4 col-sm-6">
+
+                <div class="stat-card green-card">
+
+                    <div class="stat-icon">📋</div>
+
+                    <div class="stat-label">Total Complaints</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.totalComplaints}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+
+                <div class="stat-card orange-card">
+
+                    <div class="stat-icon">⏳</div>
+
+                    <div class="stat-label">Pending Complaints</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.pendingComplaints}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+
+                <div class="stat-card blue-card">
+
+                    <div class="stat-icon">📌</div>
+
+                    <div class="stat-label">Assigned Complaints</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.assignedComplaints}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+
+                <div class="stat-card purple-card">
+
+                    <div class="stat-icon">🔄</div>
+
+                    <div class="stat-label">In Progress</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.inProgressComplaints}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+
+                <div class="stat-card green-card">
+
+                    <div class="stat-icon">✓</div>
+
+                    <div class="stat-label">Resolved Complaints</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.resolvedComplaints}">0</h2>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+
+                <div class="stat-card red-card">
+
+                    <div class="stat-icon">✕</div>
+
+                    <div class="stat-label">Rejected Complaints</div>
+
+                    <h2 class="stat-number"
+                        th:text="${stats.rejectedComplaints}">0</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MANAGE COMPLAINTS -->
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+
+            <div>
+
+                <h4 class="section-heading mb-1">
+                    🗂️ Manage Complaints
+                </h4>
+
+                <p class="section-description mb-0">
+                    Review citizen complaints and assign them to available workers.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+
+        <div th:if="${success}"
+             class="alert alert-success"
+             role="alert"
+             th:text="${success}">
+        </div>
+
+        <!-- ERROR MESSAGE -->
+
+        <div th:if="${error}"
+             class="alert alert-danger"
+             role="alert"
+             th:text="${error}">
+        </div>
+
+
+        <!-- NO COMPLAINTS -->
+
+        <div th:if="${#lists.isEmpty(complaints)}"
+             class="empty-state">
+
+            <div class="empty-icon">📭</div>
+
+            <h5 class="fw-bold" style="color: #25283d;">
+                No Complaints Yet
+            </h5>
+
+            <p class="mb-0">
+                Citizen complaints will appear here when submitted.
+            </p>
+
+        </div>
+
+
+        <!-- COMPLAINT LIST -->
+
+        <div th:each="complaint : ${complaints}"
+             class="complaint-card">
+
+            <!-- Complaint Header -->
+
+            <div class="complaint-header">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <h5 class="complaint-title"
+                        th:text="${complaint.complaintType}">
+                        Complaint Type
+                    </h5>
+
+                    <span class="status-badge"
+                          th:classappend="${complaint.status == 'PENDING' ? ' status-pending' :
+                                           complaint.status == 'ASSIGNED' ? ' status-assigned' :
+                                           complaint.status == 'IN_PROGRESS' ? ' status-progress' :
+                                           complaint.status == 'RESOLVED' ? ' status-resolved' :
+                                           complaint.status == 'REJECTED' ? ' status-rejected' : ''}"
+                          th:text="${complaint.status}">
+                        Status
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Complaint Body -->
+
+            <div class="complaint-body">
+
+                <div class="row">
+
+                    <div class="col-lg-8">
+
+                        <div class="detail-label">
+                            Description
+                        </div>
+
+                        <p class="detail-value"
+                           th:text="${complaint.description}">
+                        </p>
+
+
+                        <div class="detail-label">
+                            Location
+                        </div>
+
+                        <p class="detail-value"
+                           th:text="${complaint.address}">
+                        </p>
+
+
+                        <div class="detail-label">
+                            Reported By
+                        </div>
+
+                        <p class="detail-value"
+                           th:text="${complaint.createdBy.fullName}">
+                        </p>
+
+
+                        <div th:if="${complaint.assignedWorker != null}">
+
+                            <div class="detail-label">
+                                Currently Assigned To
+                            </div>
+
+                            <p class="detail-value"
+                               th:text="${complaint.assignedWorker.fullName}">
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Complaint Image -->
+
+                    <div class="col-lg-4"
+                         th:if="${complaint.imageUrl != null and !#strings.isEmpty(complaint.imageUrl)}">
+
+                        <div class="detail-label">
+                            Complaint Image
+                        </div>
+
+                        <img th:src="${complaint.imageUrl}"
+                             alt="Complaint Image"
+                             class="complaint-image mt-2">
+
+                    </div>
+
+                </div>
+
+
+                <!-- WORKER ASSIGNMENT -->
+
+                <div class="assignment-box">
+
+                    <h6 class="assignment-title">
+                        👷 Worker Assignment
+                    </h6>
+
+                    <form th:action="@{/admin/complaints/assign}"
+                          method="post"
+                          class="row g-3 align-items-end">
+
+                        <input type="hidden"
+                               name="complaintId"
+                               th:value="${complaint.id}">
+
+
+                        <div class="col-md-8">
+
+                            <label class="form-label fw-semibold">
+                                Select Worker
+                            </label>
+
+                            <select name="workerId"
+                                    class="form-select"
+                                    required
+                                    th:disabled="${#lists.isEmpty(workers)}">
+
+                                <option value="">
+                                    Select an available worker
+                                </option>
+
+                                <option th:each="worker : ${workers}"
+                                        th:value="${worker.id}"
+                                        th:text="${worker.fullName + ' (' + worker.email + ')'}"
+                                        th:selected="${complaint.assignedWorker != null and complaint.assignedWorker.id == worker.id}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <button type="submit"
+                                    class="assign-button"
+                                    th:disabled="${#lists.isEmpty(workers)}">
+
+                                Assign Complaint →
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <div th:if="${#lists.isEmpty(workers)}"
+                         class="text-danger mt-3"
+                         style="font-size: 0.85rem;">
+
+                        No active workers available. Please create a worker account first.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="admin-footer">
+
+        <div class="container">
+
+            Smart Waste Management System
+            <br>
+
+            <span>
+                Admin Control Panel | Building a Cleaner Environment 🌱
+            </span>
+
+        </div>
+
+    </footer>
+
+
+</body>
+</html>
+

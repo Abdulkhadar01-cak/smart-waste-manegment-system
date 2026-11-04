@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Worker Dashboard | Smart Waste Management</title>
+
+<link rel="stylesheet"
+      th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #f5f6f8;
+        font-family: Arial, sans-serif;
+        color: #25283d;
+    }
+
+    .worker-layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+
+    .worker-sidebar {
+        width: 255px;
+        background: #25283d;
+        color: white;
+        padding: 28px 18px;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+    }
+
+    .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 10px 32px;
+        border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .sidebar-brand img {
+        width: 43px;
+        height: 43px;
+        object-fit: contain;
+    }
+
+    .sidebar-brand h4 {
+        font-size: 16px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .sidebar-brand small {
+        display: block;
+        color: #aeb5c3;
+        font-size: 10px;
+        margin-top: 4px;
+    }
+
+    .sidebar-label {
+        color: #929bad;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin: 30px 12px 13px;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 13px 14px;
+        margin-bottom: 7px;
+        color: #c8ced9;
+        text-decoration: none;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+        background: #198754;
+        color: white;
+    }
+
+    .sidebar-icon {
+        width: 22px;
+        text-align: center;
+        font-size: 17px;
+    }
+
+    .sidebar-bottom {
+        margin-top: auto;
+        border-top: 1px solid rgba(255,255,255,.1);
+        padding-top: 18px;
+    }
+
+    .logout-button {
+        width: 100%;
+        border: none;
+        background: rgba(220,53,69,.13);
+        color: #ff9ba5;
+        padding: 12px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    .logout-button:hover {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* MAIN CONTENT */
+
+    .worker-main {
+        margin-left: 255px;
+        width: calc(100% - 255px);
+        padding: 30px 38px;
+    }
+
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .topbar h2 {
+        font-size: 25px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .topbar p {
+        margin: 7px 0 0;
+        color: #858b98;
+        font-size: 13px;
+    }
+
+    .worker-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        border: 1px solid #e9ebef;
+        border-radius: 11px;
+        padding: 10px 15px;
+    }
+
+    .worker-avatar {
+        display: grid;
+        place-items: center;
+        width: 37px;
+        height: 37px;
+        border-radius: 50%;
+        background: #e6f4e9;
+        color: #198754;
+        font-weight: 800;
+    }
+
+    .worker-badge strong {
+        display: block;
+        font-size: 12px;
+    }
+
+    .worker-badge small {
+        color: #858b98;
+        font-size: 10px;
+    }
+
+    /* WELCOME BANNER */
+
+    .welcome-banner {
+        background: linear-gradient(110deg, #198754, #126b42);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 15px;
+        margin-bottom: 27px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-banner h3 {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 9px;
+    }
+
+    .welcome-banner p {
+        color: #d9f0e1;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .welcome-decoration {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 50%;
+        right: 45px;
+        top: -80px;
+    }
+
+    .welcome-decoration::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 50%;
+        top: 28px;
+        left: 28px;
+    }
+
+    /* TASK FILTER CARDS */
+
+    .section-title {
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 17px;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 32px;
+    }
+
+    .filter-card {
+        display: block;
+        padding: 20px;
+        background: white;
+        border: 1px solid #e9ebef;
+        border-radius: 13px;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+    .filter-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 9px 22px rgba(37,40,61,.07);
+        border-color: #c9e3d1;
+    }
+
+    .filter-card.active {
+        border: 2px solid #198754;
+        background: #f2faf4;
+    }
+
+    .filter-icon {
+        display: grid;
+        place-items: center;
+        width: 39px;
+        height: 39px;
+        border-radius: 10px;
+        font-size: 18px;
+        margin-bottom: 13px;
+    }
+
+    .filter-all .filter-icon {
+        background: #e9effb;
+        color: #4775b8;
+    }
+
+    .filter-assigned .filter-icon {
+        background: #fff1e4;
+        color: #fc8019;
+    }
+
+    .filter-progress .filter-icon {
+        background: #fff6d9;
+        color: #b8860b;
+    }
+
+    .filter-resolved .filter-icon {
+        background: #e4f4e9;
+        color: #198754;
+    }
+
+    .filter-card strong {
+        display: block;
+        color: #25283d;
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .filter-card small {
+        color: #89909d;
+        font-size: 11px;
+    }
+
+    /* COMPLAINTS */
+
+    .complaints-section {
+        background: white;
+        border: 1px solid #e9ebef;
+        border-radius: 14px;
+        padding: 25px;
+    }
+
+    .complaints-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 23px;
+    }
+
+    .complaints-header h3 {
+        font-size: 18px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .complaint-count {
+        background: #e8f5ee;
+        color: #198754;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .complaint-card {
+        border: 1px solid #e9ebef;
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 17px;
+        transition: .2s;
+    }
+
+    .complaint-card:hover {
+        border-color: #c9e3d1;
+        box-shadow: 0 6px 18px rgba(37,40,61,.05);
+    }
+
+    .complaint-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .complaint-top h4 {
+        font-size: 15px;
+        font-weight: 800;
+        margin: 0 0 8px;
+    }
+
+    .complaint-type-label {
+        color: #9298a4;
+        font-size: 11px;
+    }
+
+    .status-badge {
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .status-assigned {
+        background: #fff0df;
+        color: #c56b13;
+    }
+
+    .status-progress {
+        background: #fff5d7;
+        color: #9b7600;
+    }
+
+    .status-resolved {
+        background: #e5f4e9;
+        color: #198754;
+    }
+
+    .complaint-divider {
+        border: 0;
+        border-top: 1px solid #edf0f3;
+        margin: 17px 0;
+    }
+
+    .complaint-detail {
+        margin-bottom: 12px;
+        color: #747b89;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .complaint-detail strong {
+        color: #34394b;
+        margin-right: 5px;
+    }
+
+    .complaint-image {
+        max-width: 230px;
+        max-height: 180px;
+        object-fit: cover;
+        border-radius: 9px;
+        margin-top: 8px;
+        display: block;
+    }
+
+    .complaint-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .action-button {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 17px;
+        font-size: 12px;
+        font-weight: 800;
+        transition: .2s;
+    }
+
+    .start-button {
+        background: #fff0df;
+        color: #c56b13;
+    }
+
+    .start-button:hover {
+        background: #fc8019;
+        color: white;
+    }
+
+    .resolve-button {
+        background: #198754;
+        color: white;
+    }
+
+    .resolve-button:hover {
+        background: #126b42;
+        color: white;
+    }
+
+    .resolved-message {
+        color: #198754;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 55px 20px;
+        background: #f8faf9;
+        border: 1px dashed #dce5df;
+        border-radius: 12px;
+    }
+
+    .empty-icon {
+        font-size: 35px;
+        margin-bottom: 13px;
+    }
+
+    .empty-state h4 {
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .empty-state p {
+        color: #858b98;
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .alert {
+        font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width: 1050px) {
+        .worker-sidebar {
+            width: 220px;
+        }
+
+        .worker-main {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            padding: 25px;
+        }
+
+        .filter-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width: 700px) {
+        .worker-layout {
+            display: block;
+        }
+
+        .worker-sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+            padding: 15px;
+        }
+
+        .sidebar-brand {
+            padding-bottom: 15px;
+        }
+
+        .sidebar-label {
+            margin-top: 15px;
+        }
+
+        .sidebar-bottom {
+            margin-top: 12px;
+        }
+
+        .worker-main {
+            width: 100%;
+            margin-left: 0;
+            padding: 20px 15px;
+        }
+
+        .topbar {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .welcome-banner {
+            padding: 24px 20px;
+        }
+
+        .filter-grid {
+            gap: 10px;
+        }
+
+        .filter-card {
+            padding: 15px;
+        }
+
+        .complaints-section {
+            padding: 16px;
+        }
+
+        .complaint-card {
+            padding: 16px;
+        }
+    }
+
+    @media(max-width: 400px) {
+        .filter-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .complaint-top {
+            flex-direction: column;
+        }
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="worker-layout">
+
+```
+<!-- SIDEBAR -->
+
+<aside class="worker-sidebar">
+
+    <div class="sidebar-brand">
+
+        <img th:src="@{/images/smart-waste-logo.svg}"
+             alt="Smart Waste Logo">
+
+        <div>
+            <h4>Smart Waste</h4>
+            <small>Management System</small>
+        </div>
+
+    </div>
+
+    <div class="sidebar-label">WORKER MENU</div>
+
+    <a th:href="@{/worker/dashboard}"
+       class="sidebar-link active">
+
+        <span class="sidebar-icon">▦</span>
+        Dashboard
+
+    </a>
+
+    <a th:href="@{/worker/dashboard(status='ASSIGNED')}"
+       class="sidebar-link">
+
+        <span class="sidebar-icon">📋</span>
+        Assigned Tasks
+
+    </a>
+
+    <a th:href="@{/worker/dashboard(status='IN_PROGRESS')}"
+       class="sidebar-link">
+
+        <span class="sidebar-icon">⏳</span>
+        In Progress
+
+    </a>
+
+    <a th:href="@{/worker/dashboard(status='RESOLVED')}"
+       class="sidebar-link">
+
+        <span class="sidebar-icon">✓</span>
+        Resolved Tasks
+
+    </a>
+
+    <div class="sidebar-bottom">
+
+        <form th:action="@{/logout}" method="post">
+
+            <button type="submit" class="logout-button">
+                ↪ &nbsp; Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN CONTENT -->
+
+<main class="worker-main">
+
+    <!-- HEADER -->
+
+    <div class="topbar">
+
+        <div>
+            <h2>Worker Dashboard</h2>
+            <p>Manage your assigned tasks and keep your city clean.</p>
+        </div>
+
+        <div class="worker-badge">
+
+            <div class="worker-avatar">W</div>
+
+            <div>
+                <strong>Worker Portal</strong>
+                <small>Active Workspace</small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- WELCOME BANNER -->
+
+    <section class="welcome-banner">
+
+        <h3>Welcome to Your Workspace! 👋</h3>
+
+        <p>
+            Every completed task makes our neighbourhood cleaner.
+            Let's make a difference together.
+        </p>
+
+        <div class="welcome-decoration"></div>
+
+    </section>
+
+
+    <!-- TASK NAVIGATION -->
+
+    <h3 class="section-title">Your Task Overview</h3>
+
+    <div class="filter-grid">
+
+        <a th:href="@{/worker/dashboard}"
+           class="filter-card filter-all">
+
+            <div class="filter-icon">▦</div>
+
+            <strong>All Tasks</strong>
+
+            <small>View all your complaints</small>
+
+        </a>
+
+
+        <a th:href="@{/worker/dashboard(status='ASSIGNED')}"
+           class="filter-card filter-assigned">
+
+            <div class="filter-icon">📋</div>
+
+            <strong>Assigned Tasks</strong>
+
+            <small>Tasks waiting to start</small>
+
+        </a>
+
+
+        <a th:href="@{/worker/dashboard(status='IN_PROGRESS')}"
+           class="filter-card filter-progress">
+
+            <div class="filter-icon">⏳</div>
+
+            <strong>In Progress</strong>
+
+            <small>Currently working on</small>
+
+        </a>
+
+
+        <a th:href="@{/worker/dashboard(status='RESOLVED')}"
+           class="filter-card filter-resolved">
+
+            <div class="filter-icon">✓</div>
+
+            <strong>Resolved</strong>
+
+            <small>Successfully completed</small>
+
+        </a>
+
+    </div>
+
+
+    <!-- COMPLAINTS SECTION -->
+
+    <section class="complaints-section">
+
+        <div class="complaints-header">
+
+            <h3
+                th:text="${currentStatus == null ? 'All My Complaints' : currentStatus + ' Complaints'}">
+                My Complaints
+            </h3>
+
+            <span class="complaint-count">
+                MY TASKS
+            </span>
+
+        </div>
+
+
+        <!-- SUCCESS MESSAGE -->
+
+        <div th:if="${success}"
+             class="alert alert-success"
+             th:text="${success}">
+        </div>
+
+
+        <!-- ERROR MESSAGE -->
+
+        <div th:if="${error}"
+             class="alert alert-danger"
+             th:text="${error}">
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div th:if="${#lists.isEmpty(assignedComplaints)}"
+             class="empty-state">
+
+            <div class="empty-icon">📭</div>
+
+            <h4>No Complaints Found</h4>
+
+            <p>
+                There are no complaints available in this section right now.
+            </p>
+
+        </div>
+
+
+        <!-- COMPLAINT CARDS -->
+
+        <div th:each="complaint : ${assignedComplaints}"
+             class="complaint-card">
+
+            <div class="complaint-top">
+
+                <div>
+
+                    <h4 th:text="${complaint.complaintType}">
+                        Complaint Type
+                    </h4>
+
+                    <span class="complaint-type-label">
+                        Waste Management Request
+                    </span>
+
+                </div>
+
+
+                <span class="status-badge"
+                      th:classappend="${complaint.status == 'ASSIGNED' ? ' status-assigned' :
+                                       (complaint.status == 'IN_PROGRESS' ? ' status-progress' :
+                                       (complaint.status == 'RESOLVED' ? ' status-resolved' : ''))}"
+                      th:text="${complaint.status}">
+                </span>
+
+            </div>
+
+
+            <hr class="complaint-divider">
+
+
+            <div class="complaint-detail">
+
+                <strong>Description:</strong>
+
+                <span th:text="${complaint.description}">
+                    Complaint description
+                </span>
+
+            </div>
+
+
+            <div class="complaint-detail">
+
+                <strong>Location:</strong>
+
+                <span th:text="${complaint.address != null ? complaint.address : 'Location not provided'}">
+                    Complaint location
+                </span>
+
+            </div>
+
+
+            <!-- COMPLAINT IMAGE -->
+
+            <div th:if="${complaint.imageUrl != null
+                         and !#strings.isEmpty(complaint.imageUrl)}"
+                 class="complaint-detail">
+
+                <strong>Complaint Image:</strong>
+
+                <img th:src="${complaint.imageUrl}"
+                     alt="Complaint Image"
+                     class="complaint-image">
+
+            </div>
+
+
+            <hr class="complaint-divider">
+
+
+            <!-- START WORK -->
+
+            <div class="complaint-actions">
+
+                <form th:if="${complaint.status == 'ASSIGNED'}"
+                      th:action="@{/worker/update-status}"
+                      method="post">
+
+                    <input type="hidden"
+                           name="complaintId"
+                           th:value="${complaint.id}">
+
+                    <input type="hidden"
+                           name="status"
+                           value="IN_PROGRESS">
+
+                    <button type="submit"
+                            class="action-button start-button">
+
+                        ▶ &nbsp; Start Work
+
+                    </button>
+
+                </form>
+
+
+                <!-- MARK AS RESOLVED -->
+
+                <form th:if="${complaint.status == 'IN_PROGRESS'}"
+                      th:action="@{/worker/update-status}"
+                      method="post">
+
+                    <input type="hidden"
+                           name="complaintId"
+                           th:value="${complaint.id}">
+
+                    <input type="hidden"
+                           name="status"
+                           value="RESOLVED">
+
+                    <button type="submit"
+                            class="action-button resolve-button">
+
+                        ✓ &nbsp; Mark as Resolved
+
+                    </button>
+
+                </form>
+
+
+                <!-- RESOLVED MESSAGE -->
+
+                <span th:if="${complaint.status == 'RESOLVED'}"
+                      class="resolved-message">
+
+                    ✓ This complaint has been resolved successfully.
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="text-center mt-4 mb-3">
+
+        <small class="text-muted">
+            © 2026 Smart Waste Management System
+        </small>
+
+    </div>
+
+</main>
+```
+
+</div>
+
+</body>
+</html>
