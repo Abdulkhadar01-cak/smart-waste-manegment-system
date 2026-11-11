@@ -1,12 +1,11 @@
+
 # Smart Waste Management System
 
 A municipal waste monitoring and collection optimization platform built with **Java Spring Boot 3** and **Thymeleaf**.
 
----
 
 ## Project Folder Architecture
 
-```
 Smart-Waste-Management/
 │
 ├── frontend/
@@ -56,9 +55,9 @@ Smart-Waste-Management/
 ├── .gitignore                        # Git ignore rules for Java, Maven, and IDEs
 ├── .env.example                      # Environment variables template
 └── README.md                         # Project overview and folder documentation
-```
 
----
+
+
 
 ## Purpose of Every Folder
 
@@ -103,16 +102,14 @@ System documentation for developers and stakeholders.
 - `architecture.md`: Comprehensive explanation of the layered architecture and data flow.
 - `setup-guide.md`: Step-by-step developer guide to compile, test, and run the project.
 
----
 
 ## Verification: Template & Static Asset Resolution
 
 To verify that Spring Boot correctly locates templates and static resources:
 
-```powershell
+powershell
 cd backend
 mvn test
-```
 
 All 5 verification tests pass:
 1. Context loading
@@ -120,3 +117,6 @@ All 5 verification tests pass:
 3. Static CSS resolution at `GET /css/style.css`
 4. Static JS resolution at `GET /js/main.js`
 5. Static SVG logo resolution at `GET /images/smart-waste-logo.svg`
+
+
+
